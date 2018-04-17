@@ -8,7 +8,7 @@ Demo Spring Boot Security - REST API
 4. MySQL 
 5. Spring Tool Suite
 
-# Database name: securitydb
+# Database name: spring_rest_security_db
 
 # Online Bcrypt Hash Generator and Checker:
 http://www.devglan.com/online-tools/bcrypt-hash-generator
