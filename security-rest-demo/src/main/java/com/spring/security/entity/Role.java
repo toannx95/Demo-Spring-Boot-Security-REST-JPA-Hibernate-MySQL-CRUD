@@ -1,41 +1,37 @@
 package com.spring.security.entity;
 
 import java.io.Serializable;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "ROLE")
+@Table(name = "roles")
 public class Role implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ID", nullable = false)
-	private Integer id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(nullable = false)
+	private Long id;
 
-	@Column(name = "NAME", nullable = false)
+	@Size(max = 60)
+	@Column(nullable = false, unique = true)
 	private String name;
-
-	@ManyToMany(mappedBy = "roles")
-	private Set<User> users;
 
 	public Role() {
 	}
 
-	public Role(Integer id, String name, Set<User> users) {
+	public Role(Long id, String name) {
 		super();
 		this.id = id;
 		this.name = name;
-		this.users = users;
 	}
 
 	public Role(String name) {
@@ -43,11 +39,11 @@ public class Role implements Serializable {
 		this.name = name;
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -57,19 +53,6 @@ public class Role implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public Set<User> getUsers() {
-		return users;
-	}
-
-	public void setUsers(Set<User> users) {
-		this.users = users;
-	}
-
-	@Override
-	public String toString() {
-		return "Role [id=" + id + ", name=" + name + ", users=" + users + "]";
 	}
 
 }

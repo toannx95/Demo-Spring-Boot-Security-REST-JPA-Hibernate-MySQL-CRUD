@@ -1,7 +1,8 @@
 package com.spring.security.config;
 
-import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -12,7 +13,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.spring.security.entity.Role;
 import com.spring.security.entity.User;
 import com.spring.security.repository.UserRepository;
 
@@ -24,19 +24,16 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 	@Override
 	@Transactional
-	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-		User activeUser = userRepository.findByUserNameAndActiveTrue(userName);
-		if (activeUser == null) {
-			throw new UsernameNotFoundException("User not found!");
-		}
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		User user = userRepository.findByUsername(username);
+		if (Objects.isNull(user)) {
+			throw new UsernameNotFoundException("User not found with username: " + username);
 
-		Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-		Set<Role> roles = activeUser.getRoles();
-		for (Role role : roles) {
-			grantedAuthorities.add(new SimpleGrantedAuthority(role.getName()));
 		}
+		Set<GrantedAuthority> grantedAuthorities = user.getRoles().stream()
+				.map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toSet());
 
-		return new org.springframework.security.core.userdetails.User(activeUser.getUserName(),
-				activeUser.getPassword(), grantedAuthorities);
+		return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
+				grantedAuthorities);
 	}
 }

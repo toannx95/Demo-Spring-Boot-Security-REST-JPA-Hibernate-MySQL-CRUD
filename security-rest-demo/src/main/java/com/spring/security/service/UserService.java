@@ -2,25 +2,21 @@ package com.spring.security.service;
 
 import java.util.List;
 
-import com.spring.security.dto.UserDTO;
-import com.spring.security.exception.BadRequestException;
+import com.spring.security.dto.UserDto;
+import com.spring.security.entity.User;
 
 public interface UserService {
 
-	List<UserDTO> findAll() throws BadRequestException;
+	List<User> getAllUsers();
 
-	UserDTO findOne(Integer id) throws BadRequestException;
+	User getUser(Long id);
 
-	UserDTO create(UserDTO userDTO) throws BadRequestException;
+	User getUser(String username);
 
-	UserDTO updateForAdmin(UserDTO userDTO) throws BadRequestException;
-	
-	UserDTO updatePassAndEmail(String userName, String password, String email) throws BadRequestException;
+	User createUser(UserDto userDto);
 
-	void delete(Integer id) throws BadRequestException;
+	User updateUser(UserDto userDto);
 
-	UserDTO findByUserNameAndActiveTrue(String userName) throws BadRequestException;
-
-	UserDTO findByUserName(String userName) throws BadRequestException;
+	void deleteUser(Long id);
 
 }

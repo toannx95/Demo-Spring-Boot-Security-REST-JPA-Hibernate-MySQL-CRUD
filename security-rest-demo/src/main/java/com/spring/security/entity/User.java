@@ -12,63 +12,77 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
-@Table(name = "USER")
+@Table(name = "users")
 public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ID", nullable = false)
-	private Integer id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(nullable = false)
+	private Long id;
 
-	@Column(name = "USERNAME", nullable = false, unique = true)
-	private String userName;
+	@NotBlank
+	@Size(max = 15)
+	@Column(nullable = false, unique = true)
+	private String username;
 
-	@Column(name = "PASSWORD", nullable = false)
+	@NotBlank
+	@Size(max = 100)
+	@Column(nullable = false)
 	private String password;
 
-	@Column(name = "EMAIL")
+	@NotBlank
+	@Size(max = 40)
+	@Email
+	@Column(nullable = false, unique = true)
 	private String email;
 
-	@Column(name = "ACTIVE", nullable = false)
-	private boolean active;
-
 	@ManyToMany
-	@JoinTable(name = "USER_ROLE", joinColumns = { @JoinColumn(name = "USER_ID") }, inverseJoinColumns = {
-			@JoinColumn(name = "ROLE_ID") })
+	@JoinTable(name = "user_roles", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
+			@JoinColumn(name = "role_id") })
 	private Set<Role> roles;
 
 	public User() {
 		super();
 	}
 
-	public User(Integer id, String userName, String password, String email, boolean active, Set<Role> roles) {
+	public User(Long id, String username, String password, String email, Set<Role> roles) {
 		super();
 		this.id = id;
-		this.userName = userName;
+		this.username = username;
 		this.password = password;
 		this.email = email;
-		this.active = active;
 		this.roles = roles;
 	}
 
-	public Integer getId() {
+	public User(String username, String password, String email) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.email = email;
+	}
+
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public String getUserName() {
-		return userName;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getPassword() {
@@ -87,14 +101,6 @@ public class User implements Serializable {
 		this.email = email;
 	}
 
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-
 	public Set<Role> getRoles() {
 		return roles;
 	}
@@ -105,8 +111,8 @@ public class User implements Serializable {
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", userName=" + userName + ", password=" + password + ", email=" + email + ", active="
-				+ active + ", roles=" + roles + "]";
+		return "User [id=" + id + ", username=" + username + ", password=" + password + ", email=" + email + ", roles="
+				+ roles + "]";
 	}
 
 }

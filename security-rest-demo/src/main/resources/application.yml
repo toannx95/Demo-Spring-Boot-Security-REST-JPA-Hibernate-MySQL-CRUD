@@ -1,0 +1,14 @@
+# Database setting
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:mysql://localhost:3306/spring_rest_security_db
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+    
+# Server setting
+server:
+  port: 8085
